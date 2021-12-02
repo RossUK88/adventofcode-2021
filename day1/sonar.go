@@ -46,16 +46,20 @@ func IncreasedDepthCount(inputs []int) int {
 func IncreasedSlidingDepthCount(inputs []int) int {
 	curr := 0
 	incCount := 0
-	for index, i := range inputs {
-		if index == 0 {
-			curr = i
+
+	// We need to start on atleast the 3rd index to get our first count
+	prev := 0
+	for i := 2; i < len(inputs); i++ {
+		if i == 2 {
+			prev = inputs[i-2] + inputs[i-1] + inputs[i]
 			continue
 		}
 
-		if i > curr {
+		curr = inputs[i-2] + inputs[i-1] + inputs[i]
+		if curr > prev {
 			incCount++
 		}
-		curr = i
+		prev = curr
 	}
 
 	return incCount
