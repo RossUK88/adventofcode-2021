@@ -16,7 +16,34 @@ func GetIncreasedDepthCountFromFile(file string) int {
 	return IncreasedDepthCount(inputsFromFile)
 }
 
+func GetIncreasedSlidingDepthCountFromFile(file string) int {
+	inputsFromFile, err := readFromFile(file)
+	if err != nil {
+		log.Fatalf("Unable to read inputs from file, %s", err)
+	}
+
+	return IncreasedSlidingDepthCount(inputsFromFile)
+}
+
 func IncreasedDepthCount(inputs []int) int {
+	curr := 0
+	incCount := 0
+	for index, i := range inputs {
+		if index == 0 {
+			curr = i
+			continue
+		}
+
+		if i > curr {
+			incCount++
+		}
+		curr = i
+	}
+
+	return incCount
+}
+
+func IncreasedSlidingDepthCount(inputs []int) int {
 	curr := 0
 	incCount := 0
 	for index, i := range inputs {
