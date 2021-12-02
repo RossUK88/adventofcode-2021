@@ -25,9 +25,41 @@ func CalculateSubmarinePosition(positions []string) int {
 
 	for _, position := range positions {
 		if isHorizontal(position) {
-			grid["x"] += getMovementAmount(position)
+			grid["x"] += getMovementAmount(position, false)
 		} else {
-			grid["y"] += getMovementAmount(position)
+			grid["y"] += getMovementAmount(position, false)
+		}
+	}
+
+	return grid["x"] * grid["y"]
+}
+
+func GetPositionAndAimOfSubmarine(file string) int {
+	inputsFromFile, err := readPositionsFromFile(file)
+	if err != nil {
+		log.Fatalf("Unable to read inputs from file, %s", err)
+	}
+
+	return CalculateSubmarinePositionAndAim(inputsFromFile)
+}
+
+func CalculateSubmarinePositionAndAim(positions []string) int {
+	grid := map[string]int{
+		"x":   0,
+		"y":   0,
+		"aim": 0,
+	}
+
+	for _, position := range positions {
+		if isHorizontal(position) {
+			//forward X does two things:
+			//It increases your horizontal position by X units.
+			//	It increases your depth by your aim multiplied by X.
+			movement := getMovementAmount(position, true)
+			grid["x"] += movement
+			grid["y"] += grid["aim"] * movement
+		} else {
+			grid["aim"] += getMovementAmount(position, false)
 		}
 	}
 
@@ -38,7 +70,7 @@ func isHorizontal(positionalData string) bool {
 	return strings.HasPrefix(positionalData, "forward")
 }
 
-func getMovementAmount(positionalData string) int {
+func getMovementAmount(positionalData string, forcePositive bool) int {
 	// Split on spaces
 	splits := strings.SplitAfter(positionalData, " ")
 
@@ -49,8 +81,10 @@ func getMovementAmount(positionalData string) int {
 	}
 
 	// If we are going up then we need to get the negative
-	if strings.Contains(positionalData, "up") {
-		movement *= -1
+	if !forcePositive {
+		if strings.Contains(positionalData, "up") {
+			movement *= -1
+		}
 	}
 
 	return movement

@@ -13,4 +13,5 @@ func main() {
 
 	// Day 2
 	fmt.Printf("The position of the submarine in Day 2 is : %d\n", day2.GetPositionOfSubmarine("./day2/input.txt"))
+	fmt.Printf("The position of the submarine in Day 2 after aiming is : %d\n", day2.GetPositionAndAimOfSubmarine("./day2/input.txt"))
 }
