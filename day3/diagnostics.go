@@ -8,7 +8,18 @@ import (
 	"strconv"
 )
 
+var allInputs []string
+
 func GetSubmarinePowerConsumption(file string) int64 {
+	inputsFromFile, err := readPositionsFromFile(file)
+	if err != nil {
+		log.Fatalf("Unable to read inputs from file, %s", err)
+	}
+
+	return CalculateSubmarinePowerConsumption(inputsFromFile)
+}
+
+func GetSubmarineLifeSupportRating(file string) int64 {
 	inputsFromFile, err := readPositionsFromFile(file)
 	if err != nil {
 		log.Fatalf("Unable to read inputs from file, %s", err)
@@ -95,6 +106,8 @@ func readPositionsFromFile(fileLocation string) ([][]int, error) {
 	// 2d Array Inverter
 	for scanner.Scan() {
 		input := scanner.Text()
+
+		allInputs = append(allInputs, input)
 
 		for charIdx, char := range input {
 			// This is the first Character in each row, so we need a new row in our inverted
