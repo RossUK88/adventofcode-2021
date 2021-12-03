@@ -10,16 +10,24 @@ import (
 
 var allInputs []string
 
-func GetSubmarinePowerConsumption(file string) int64 {
+func GetSubmarineLifeSupportRating(file string) int64 {
 	inputsFromFile, err := readPositionsFromFile(file)
 	if err != nil {
 		log.Fatalf("Unable to read inputs from file, %s", err)
 	}
 
-	return CalculateSubmarinePowerConsumption(inputsFromFile)
+	hello := "hello"
+	fmt.Println(string(hello[1]))
+
+	return CalculateLifeSupportRating(inputsFromFile)
 }
 
-func GetSubmarineLifeSupportRating(file string) int64 {
+func CalculateLifeSupportRating(diagnostics [][]int) int64 {
+
+	return int64(1)
+}
+
+func GetSubmarinePowerConsumption(file string) int64 {
 	inputsFromFile, err := readPositionsFromFile(file)
 	if err != nil {
 		log.Fatalf("Unable to read inputs from file, %s", err)
