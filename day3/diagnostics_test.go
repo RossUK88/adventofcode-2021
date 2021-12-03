@@ -12,6 +12,7 @@ func TestCalculateSubmarinePowerConsumption(t *testing.T) {
 	// this should turn into
 	// 10110 - 1
 	// 01110 - 1
+	// 11100 - 1
 	// 01100 - 0
 	// 01000 - 0
 	// 01001 - 0

@@ -17,9 +17,39 @@ func GetSubmarinePowerConsumption(file string) int {
 	return CalculateSubmarinePowerConsumption(inputsFromFile)
 }
 
-func CalculateSubmarinePowerConsumption([][]int) int {
+func CalculateSubmarinePowerConsumption(diagnostics [][]int) int {
+	var gamma []int
+
+	fmt.Println(diagnostics)
+
+	for _, diagnostic := range diagnostics {
+		gamma = append(gamma, mostCommonBinaryInSlice(diagnostic))
+	}
+
+	fmt.Println(gamma)
+	// Bitwise NOT to get the opposite of Gamma
+	//episode = ^gamma
 
 	return 1
+}
+
+func mostCommonBinaryInSlice(binarySlice []int) int {
+	on := 0
+	off := 0
+
+	for _, binary := range binarySlice {
+		if binary == 1 {
+			on += 1
+		} else {
+			off += 1
+		}
+	}
+
+	if on > off {
+		return 1
+	}
+
+	return 0
 }
 
 func readPositionsFromFile(fileLocation string) ([][]int, error) {
@@ -71,8 +101,6 @@ func readPositionsFromFile(fileLocation string) ([][]int, error) {
 
 		row++
 	}
-
-	fmt.Println(diagnostics)
 
 	return diagnostics, nil
 }
