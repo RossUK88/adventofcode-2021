@@ -16,15 +16,60 @@ func GetSubmarineLifeSupportRating(file string) int64 {
 		log.Fatalf("Unable to read inputs from file, %s", err)
 	}
 
-	hello := "hello"
-	fmt.Println(string(hello[1]))
-
 	return CalculateLifeSupportRating(inputsFromFile)
 }
 
 func CalculateLifeSupportRating(diagnostics [][]int) int64 {
+	oxygenRating := getOxygenRating(diagnostics)
+
+	return oxygenRating
+}
+
+func getOxygenRating(initialValues [][]int) int64 {
+	diagnostics := allInputs
+	values := initialValues
+	requiredAtPositionOne := mostCommonBinaryInSlice(values[0])
+	fmt.Println(requiredAtPositionOne)
+
+	// Keep looping until only one is left
+	for len(diagnostics) > 1 {
+		diagnostics = diagnostics[0:1]
+	}
+
+	// Do something with values
 
 	return int64(1)
+}
+
+func flipStringsToIntSlice(inputs []string) [][]int {
+	var results [][]int
+	row := 0
+
+	// 2d Array Inverter
+	for _, input := range inputs {
+		allInputs = append(allInputs, input)
+
+		for charIdx, char := range input {
+			// This is the first Character in each row, so we need a new row in our inverted
+			if len(results) < charIdx+1 {
+				results = append(results, []int{})
+			}
+
+			// Grab the current set of Diagnostics from our invert
+			currentDiagnostics := results[charIdx]
+
+			// Convert the Rune to an Int
+			runeToInt, _ := strconv.Atoi(string(char))
+
+			// Append the binary number and add back in at the index
+			currentDiagnostics = append(currentDiagnostics, runeToInt)
+			results[charIdx] = currentDiagnostics
+		}
+
+		row++
+	}
+
+	return results
 }
 
 func GetSubmarinePowerConsumption(file string) int64 {
