@@ -69,8 +69,6 @@ func getCo2Rating(allInputs []string, initialValues [][]int) int64 {
 		valueLookingFor = 0
 	}
 
-	fmt.Println(valueLookingFor, 0)
-	fmt.Println(diagnostics)
 	currentIndex := 0
 	// Keep looping until only one is left
 	for len(diagnostics) != 1 {
@@ -95,9 +93,6 @@ func getCo2Rating(allInputs []string, initialValues [][]int) int64 {
 		} else {
 			valueLookingFor = 1
 		}
-
-		fmt.Println(valueLookingFor, currentIndex)
-		fmt.Println(diagnostics)
 
 	}
 
@@ -207,16 +202,12 @@ func mostCommonBinaryInSliceAtPosition(binarySlice [][]int, position int, roundD
 	off := 0
 
 	for _, binary := range binarySlice[position] {
-		//value = value
-		//fmt.Println(binary)
 		if binary == 1 {
 			on += 1
 		} else {
 			off += 1
 		}
 	}
-
-	fmt.Println(on, off)
 
 	// This is some real janky logic and if i wasnt 2 hours into this I would clean this up
 	if roundDown {
