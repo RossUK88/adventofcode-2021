@@ -8,33 +8,50 @@ import (
 	"strconv"
 )
 
-var allInputs []string
-
 func GetSubmarineLifeSupportRating(file string) int64 {
-	inputsFromFile, err := readPositionsFromFile(file)
+	allInputs, inputsFromFile, err := readPositionsFromFile(file)
 	if err != nil {
 		log.Fatalf("Unable to read inputs from file, %s", err)
 	}
 
-	return CalculateLifeSupportRating(inputsFromFile)
+	return CalculateLifeSupportRating(allInputs, inputsFromFile)
 }
 
-func CalculateLifeSupportRating(diagnostics [][]int) int64 {
-	oxygenRating := getOxygenRating(diagnostics)
+func CalculateLifeSupportRating(allInputs []string, diagnostics [][]int) int64 {
+	oxygenRating := getOxygenRating(allInputs, diagnostics)
 
 	return oxygenRating
 }
 
-func getOxygenRating(initialValues [][]int) int64 {
+func getOxygenRating(allInputs []string, initialValues [][]int) int64 {
 	diagnostics := allInputs
+	fmt.Println(diagnostics)
 	values := initialValues
-	requiredAtPositionOne := mostCommonBinaryInSlice(values[0])
-	fmt.Println(requiredAtPositionOne)
 
+	valueLookingFor := mostCommonBinaryInSlice(values[0])
+	currentIndex := 0
 	// Keep looping until only one is left
 	for len(diagnostics) > 1 {
-		diagnostics = diagnostics[0:1]
+		fmt.Println(currentIndex)
+		var tempValues []string
+		for _, diag := range diagnostics {
+			char := rune(diag[currentIndex])
+			intRep, _ := strconv.Atoi(string(char))
+			if intRep == valueLookingFor {
+				tempValues = append(tempValues, diag)
+			}
+		}
+
+		currentIndex++
+		// Check new thing looking for
+		diagnostics = tempValues
+		fmt.Println(diagnostics)
+
+		values = flipStringsToIntSlice(diagnostics)
+		valueLookingFor = mostCommonBinaryInSlice(values[0])
 	}
+
+	fmt.Println(diagnostics)
 
 	// Do something with values
 
@@ -47,7 +64,6 @@ func flipStringsToIntSlice(inputs []string) [][]int {
 
 	// 2d Array Inverter
 	for _, input := range inputs {
-		allInputs = append(allInputs, input)
 
 		for charIdx, char := range input {
 			// This is the first Character in each row, so we need a new row in our inverted
@@ -73,7 +89,7 @@ func flipStringsToIntSlice(inputs []string) [][]int {
 }
 
 func GetSubmarinePowerConsumption(file string) int64 {
-	inputsFromFile, err := readPositionsFromFile(file)
+	_, inputsFromFile, err := readPositionsFromFile(file)
 	if err != nil {
 		log.Fatalf("Unable to read inputs from file, %s", err)
 	}
@@ -130,7 +146,8 @@ func mostCommonBinaryInSlice(binarySlice []int) int {
 	return 0
 }
 
-func readPositionsFromFile(fileLocation string) ([][]int, error) {
+func readPositionsFromFile(fileLocation string) ([]string, [][]int, error) {
+	var allInputs []string
 	file, err := os.Open(fileLocation)
 	if err != nil {
 		log.Fatal(err)
@@ -182,5 +199,5 @@ func readPositionsFromFile(fileLocation string) ([][]int, error) {
 		row++
 	}
 
-	return diagnostics, nil
+	return allInputs, diagnostics, nil
 }
