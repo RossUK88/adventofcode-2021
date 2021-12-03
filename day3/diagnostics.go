@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func GetSubmarinePowerConsumption(file string) int {
+func GetSubmarinePowerConsumption(file string) int64 {
 	inputsFromFile, err := readPositionsFromFile(file)
 	if err != nil {
 		log.Fatalf("Unable to read inputs from file, %s", err)
@@ -17,20 +17,36 @@ func GetSubmarinePowerConsumption(file string) int {
 	return CalculateSubmarinePowerConsumption(inputsFromFile)
 }
 
-func CalculateSubmarinePowerConsumption(diagnostics [][]int) int {
+func CalculateSubmarinePowerConsumption(diagnostics [][]int) int64 {
 	var gamma []int
+	var epislon []int
 
 	fmt.Println(diagnostics)
 
 	for _, diagnostic := range diagnostics {
 		gamma = append(gamma, mostCommonBinaryInSlice(diagnostic))
+		epsilonValue := 1
+		if mostCommonBinaryInSlice(diagnostic) == 1 {
+			epsilonValue = 0
+		}
+
+		epislon = append(epislon, epsilonValue)
+
 	}
 
-	fmt.Println(gamma)
-	// Bitwise NOT to get the opposite of Gamma
-	//episode = ^gamma
+	var gammaString string
+	var epsilonString string
+	for _, bit := range gamma {
+		gammaString = fmt.Sprintf("%s%d", gammaString, bit)
+	}
+	for _, bit := range epislon {
+		epsilonString = fmt.Sprintf("%s%d", epsilonString, bit)
+	}
 
-	return 1
+	gammaDecimal, _ := strconv.ParseInt(gammaString, 2, 16)
+	epislonDecimal, _ := strconv.ParseInt(epsilonString, 2, 16)
+
+	return gammaDecimal * epislonDecimal
 }
 
 func mostCommonBinaryInSlice(binarySlice []int) int {

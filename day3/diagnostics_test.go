@@ -23,8 +23,12 @@ func TestCalculateSubmarinePowerConsumption(t *testing.T) {
 	// 01101 - 1
 	// 01011 - 1
 
+	// Gamma - 11100001111 - 3599
+	// Epsilon - 00011110000 - 496
+	// Power = 1785104
+
 	actual := GetSubmarinePowerConsumption("./sample_input.txt")
-	expected := 350
+	expected := int64(1785104)
 
 	if actual != expected {
 		t.Errorf("Actual %d, Expected: %d", actual, expected)
