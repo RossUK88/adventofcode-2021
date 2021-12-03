@@ -19,20 +19,19 @@ func GetSubmarineLifeSupportRating(file string) int64 {
 
 func CalculateLifeSupportRating(allInputs []string, diagnostics [][]int) int64 {
 	oxygenRating := getOxygenRating(allInputs, diagnostics)
+	co2Rating := getCo2Rating(allInputs, diagnostics)
 
-	return oxygenRating
+	return oxygenRating * co2Rating
 }
 
 func getOxygenRating(allInputs []string, initialValues [][]int) int64 {
 	diagnostics := allInputs
-	fmt.Println(diagnostics)
 	values := initialValues
 
-	valueLookingFor := mostCommonBinaryInSlice(values[0])
+	valueLookingFor := mostCommonBinaryInSlice(values[0], true)
 	currentIndex := 0
 	// Keep looping until only one is left
-	for len(diagnostics) > 1 {
-		fmt.Println(currentIndex)
+	for len(diagnostics) != 1 {
 		var tempValues []string
 		for _, diag := range diagnostics {
 			char := rune(diag[currentIndex])
@@ -45,17 +44,60 @@ func getOxygenRating(allInputs []string, initialValues [][]int) int64 {
 		currentIndex++
 		// Check new thing looking for
 		diagnostics = tempValues
-		fmt.Println(diagnostics)
-
 		values = flipStringsToIntSlice(diagnostics)
-		valueLookingFor = mostCommonBinaryInSlice(values[0])
+		valueLookingFor = mostCommonBinaryInSlice(values[currentIndex-1], true)
 	}
 
-	fmt.Println(diagnostics)
+	// Do something with values
+	oxygenRatingString := diagnostics[0]
+
+	oxygenRating, _ := strconv.ParseInt(oxygenRatingString, 2, 16)
+
+	return oxygenRating
+}
+
+func getCo2Rating(allInputs []string, initialValues [][]int) int64 {
+	diagnostics := allInputs
+	values := initialValues
+
+	mostCommon := mostCommonBinaryInSlice(values[0], false)
+	valueLookingFor := 1
+	if mostCommon == 1 {
+		valueLookingFor = 0
+	}
+
+	currentIndex := 0
+	// Keep looping until only one is left
+	for len(diagnostics) != 1 {
+		var tempValues []string
+		for _, diag := range diagnostics {
+			char := rune(diag[currentIndex])
+			intRep, _ := strconv.Atoi(string(char))
+			if intRep == valueLookingFor {
+				tempValues = append(tempValues, diag)
+			}
+		}
+
+		currentIndex++
+		// Check new thing looking for
+		diagnostics = tempValues
+
+		values = flipStringsToIntSlice(diagnostics)
+		mostCommon = mostCommonBinaryInSlice(values[currentIndex-1], false)
+		if mostCommon == 1 {
+			valueLookingFor = 0
+		} else {
+			valueLookingFor = 1
+		}
+
+	}
 
 	// Do something with values
+	oxygenRatingString := diagnostics[0]
 
-	return int64(1)
+	oxygenRating, _ := strconv.ParseInt(oxygenRatingString, 2, 16)
+
+	return oxygenRating
 }
 
 func flipStringsToIntSlice(inputs []string) [][]int {
@@ -102,9 +144,9 @@ func CalculateSubmarinePowerConsumption(diagnostics [][]int) int64 {
 	var epislon []int
 
 	for _, diagnostic := range diagnostics {
-		gamma = append(gamma, mostCommonBinaryInSlice(diagnostic))
+		gamma = append(gamma, mostCommonBinaryInSlice(diagnostic, false))
 		epsilonValue := 1
-		if mostCommonBinaryInSlice(diagnostic) == 1 {
+		if mostCommonBinaryInSlice(diagnostic, false) == 1 {
 			epsilonValue = 0
 		}
 
@@ -127,7 +169,7 @@ func CalculateSubmarinePowerConsumption(diagnostics [][]int) int64 {
 	return gammaDecimal * epislonDecimal
 }
 
-func mostCommonBinaryInSlice(binarySlice []int) int {
+func mostCommonBinaryInSlice(binarySlice []int, roundDown bool) int {
 	on := 0
 	off := 0
 
@@ -139,8 +181,14 @@ func mostCommonBinaryInSlice(binarySlice []int) int {
 		}
 	}
 
-	if on > off {
-		return 1
+	if roundDown {
+		if on > off {
+			return 1
+		}
+	} else {
+		if on >= off {
+			return 1
+		}
 	}
 
 	return 0

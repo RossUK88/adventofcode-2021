@@ -43,16 +43,7 @@ func TestGetSubmarineLifeSupportRating(t *testing.T) {
 	// 0010 0100 1011
 
 	// Oxygen Rating
-	// - 1st pass
-	// 1010 0000 1100
-	// 1111 0000 1110
-	// 1100 0001 1001
-	// - 2nd Pass
-	// 1111 0000 1110
-	// 1100 0001 1001
-	// - 3rd Pass
-	// 1111 0000 1110
-	// Value = 3854
+	// Value = 3097
 
 	// C02 Rating
 	// - 1st pass
@@ -65,7 +56,7 @@ func TestGetSubmarineLifeSupportRating(t *testing.T) {
 	// Life Support = 2103808
 
 	actual := GetSubmarineLifeSupportRating("./sample_input.txt")
-	expected := int64(2103808)
+	expected := int64(1817939)
 
 	if actual != expected {
 		t.Errorf("Actual %d, Expected: %d", actual, expected)

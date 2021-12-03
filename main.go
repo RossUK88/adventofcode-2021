@@ -18,5 +18,5 @@ func main() {
 
 	// Day 3
 	fmt.Printf("The power consumption of the submarine in Day 3 is : %d\n", day3.GetSubmarinePowerConsumption("./day3/input.txt"))
-	//fmt.Printf("The position of the submarine in Day 2 after aiming is : %d\n", day2.GetPositionAndAimOfSubmarine("./day2/input.txt"))
+	fmt.Printf("The life suport rating of the submarine in Day 3 is : %d\n", day3.GetSubmarineLifeSupportRating("./day3/input.txt"))
 }
