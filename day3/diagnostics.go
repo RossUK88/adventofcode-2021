@@ -28,6 +28,7 @@ func getOxygenRating(allInputs []string, initialValues [][]int) int64 {
 	diagnostics := allInputs
 	values := initialValues
 
+	// TODO - We are using this wrong
 	valueLookingFor := mostCommonBinaryInSlice(values[0], true)
 	currentIndex := 0
 	// Keep looping until only one is left
@@ -44,8 +45,10 @@ func getOxygenRating(allInputs []string, initialValues [][]int) int64 {
 		currentIndex++
 		// Check new thing looking for
 		diagnostics = tempValues
+		//fmt.Println(diagnostics)
 		values = flipStringsToIntSlice(diagnostics)
-		valueLookingFor = mostCommonBinaryInSlice(values[currentIndex-1], true)
+		valueLookingFor = mostCommonBinaryInSlice(values[0], true)
+		fmt.Println(values, valueLookingFor)
 	}
 
 	// Do something with values
