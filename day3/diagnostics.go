@@ -21,8 +21,6 @@ func CalculateSubmarinePowerConsumption(diagnostics [][]int) int64 {
 	var gamma []int
 	var epislon []int
 
-	fmt.Println(diagnostics)
-
 	for _, diagnostic := range diagnostics {
 		gamma = append(gamma, mostCommonBinaryInSlice(diagnostic))
 		epsilonValue := 1
