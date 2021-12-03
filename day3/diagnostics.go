@@ -28,8 +28,7 @@ func getOxygenRating(allInputs []string, initialValues [][]int) int64 {
 	diagnostics := allInputs
 	values := initialValues
 
-	// TODO - We are using this wrong
-	valueLookingFor := mostCommonBinaryInSlice(values[0], true)
+	valueLookingFor := mostCommonBinaryInSliceAtPosition(values, 0, false)
 	currentIndex := 0
 	// Keep looping until only one is left
 	for len(diagnostics) != 1 {
@@ -41,14 +40,15 @@ func getOxygenRating(allInputs []string, initialValues [][]int) int64 {
 				tempValues = append(tempValues, diag)
 			}
 		}
-
-		currentIndex++
+		if currentIndex < len(allInputs[0])-1 {
+			currentIndex++
+		}
 		// Check new thing looking for
 		diagnostics = tempValues
-		//fmt.Println(diagnostics)
+
 		values = flipStringsToIntSlice(diagnostics)
-		valueLookingFor = mostCommonBinaryInSlice(values[0], true)
-		fmt.Println(values, valueLookingFor)
+		valueLookingFor = mostCommonBinaryInSliceAtPosition(values, currentIndex, false)
+
 	}
 
 	// Do something with values
@@ -63,12 +63,14 @@ func getCo2Rating(allInputs []string, initialValues [][]int) int64 {
 	diagnostics := allInputs
 	values := initialValues
 
-	mostCommon := mostCommonBinaryInSlice(values[0], false)
+	mostCommon := mostCommonBinaryInSliceAtPosition(values, 0, true)
 	valueLookingFor := 1
 	if mostCommon == 1 {
 		valueLookingFor = 0
 	}
 
+	fmt.Println(valueLookingFor, 0)
+	fmt.Println(diagnostics)
 	currentIndex := 0
 	// Keep looping until only one is left
 	for len(diagnostics) != 1 {
@@ -81,26 +83,30 @@ func getCo2Rating(allInputs []string, initialValues [][]int) int64 {
 			}
 		}
 
-		currentIndex++
+		if currentIndex < len(allInputs[0])-1 {
+			currentIndex++
+		}
 		// Check new thing looking for
 		diagnostics = tempValues
-
 		values = flipStringsToIntSlice(diagnostics)
-		mostCommon = mostCommonBinaryInSlice(values[currentIndex-1], false)
+		mostCommon = mostCommonBinaryInSliceAtPosition(values, currentIndex, true)
 		if mostCommon == 1 {
 			valueLookingFor = 0
 		} else {
 			valueLookingFor = 1
 		}
 
+		fmt.Println(valueLookingFor, currentIndex)
+		fmt.Println(diagnostics)
+
 	}
 
 	// Do something with values
-	oxygenRatingString := diagnostics[0]
+	co2RatingString := diagnostics[0]
 
-	oxygenRating, _ := strconv.ParseInt(oxygenRatingString, 2, 16)
+	co2Rating, _ := strconv.ParseInt(co2RatingString, 2, 16)
 
-	return oxygenRating
+	return co2Rating
 }
 
 func flipStringsToIntSlice(inputs []string) [][]int {
@@ -195,6 +201,35 @@ func mostCommonBinaryInSlice(binarySlice []int, roundDown bool) int {
 	}
 
 	return 0
+}
+func mostCommonBinaryInSliceAtPosition(binarySlice [][]int, position int, roundDown bool) int {
+	on := 0
+	off := 0
+
+	for _, binary := range binarySlice[position] {
+		//value = value
+		//fmt.Println(binary)
+		if binary == 1 {
+			on += 1
+		} else {
+			off += 1
+		}
+	}
+
+	fmt.Println(on, off)
+
+	// This is some real janky logic and if i wasnt 2 hours into this I would clean this up
+	if roundDown {
+		if off > on {
+			return 0
+		}
+		return 1
+	} else {
+		if on >= off {
+			return 1
+		}
+		return 0
+	}
 }
 
 func readPositionsFromFile(fileLocation string) ([]string, [][]int, error) {
