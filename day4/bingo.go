@@ -78,7 +78,21 @@ func (bc *BingoCard) checkCompleted() bool {
 		return true
 	}
 
-	// TODO - Check Columns for Completion
+	// Check Columns for Completion
+	for i := 0; i < 5; i++ {
+		columnComplete := true
+		for j := 0; j < 5; j++ {
+			if !bc.board[j][i].marked {
+				columnComplete = false
+			}
+		}
+
+		if columnComplete {
+			completed = true
+			break
+		}
+
+	}
 
 	return completed
 }
