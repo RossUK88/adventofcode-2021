@@ -2,7 +2,6 @@ package day4
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
