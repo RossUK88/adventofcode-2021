@@ -114,13 +114,30 @@ func GetFinalBingoScoreFromFile(file string) int {
 		log.Fatalf("Unable to read inputs from file, %s", err)
 	}
 
-	return CalculateFinalScore(bingoNumbers, cards)
+	return CalculateFinalScore(bingoNumbers, cards, false)
 }
 
-func CalculateFinalScore(numbers []int, cards []BingoCard) int {
+func GetFinalBingoScoreFromLastToWinFromFile(file string) int {
+	bingoNumbers, cards, err := readBingoCardsFromFile(file)
+	if err != nil {
+		log.Fatalf("Unable to read inputs from file, %s", err)
+	}
+
+	return CalculateFinalScore(bingoNumbers, cards, true)
+}
+
+func CalculateFinalScore(numbers []int, cards []BingoCard, lastBoardToWin bool) int {
+
 	foundCompleted := false
 	completedCardIdx := 0
 	completedOnNumber := 0
+	hasLastBoard := false
+
+	// Keep track of all cards uncompleted so we dont over mark
+	var uncompletedCards []int
+	for idx, _ := range cards {
+		uncompletedCards = append(uncompletedCards, idx)
+	}
 
 	for _, numberToMark := range numbers {
 		for cardIdx, card := range cards {
@@ -130,13 +147,23 @@ func CalculateFinalScore(numbers []int, cards []BingoCard) int {
 				if card.checkCompleted() {
 					foundCompleted = true
 					completedOnNumber = numberToMark
-					completedCardIdx = cardIdx
-					break
+					if !hasLastBoard {
+						completedCardIdx = cardIdx
+					}
+					uncompletedCards = removeCardFromUncompleted(uncompletedCards, completedCardIdx)
+					if !lastBoardToWin {
+						break
+					}
 				}
 			}
 		}
 
-		if foundCompleted {
+		if len(uncompletedCards) == 1 {
+			hasLastBoard = true
+			completedCardIdx = uncompletedCards[0]
+		}
+
+		if (foundCompleted && !lastBoardToWin) || (foundCompleted && len(uncompletedCards) == 0) {
 			break
 		}
 	}
@@ -146,6 +173,16 @@ func CalculateFinalScore(numbers []int, cards []BingoCard) int {
 	}
 
 	return cards[completedCardIdx].calculateScore(completedOnNumber)
+}
+
+func removeCardFromUncompleted(uncompleted []int, value int) []int {
+	for idx, card := range uncompleted {
+		if card == value {
+			return append(uncompleted[:idx], uncompleted[idx+1:]...)
+		}
+	}
+
+	return uncompleted
 }
 
 func readBingoCardsFromFile(fileLocation string) ([]int, []BingoCard, error) {
