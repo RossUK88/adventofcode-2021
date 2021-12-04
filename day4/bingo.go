@@ -2,6 +2,7 @@ package day4
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -150,9 +151,10 @@ func CalculateFinalScore(numbers []int, cards []BingoCard, lastBoardToWin bool) 
 					if !hasLastBoard {
 						completedCardIdx = cardIdx
 					}
-					uncompletedCards = removeCardFromUncompleted(uncompletedCards, completedCardIdx)
-					if !lastBoardToWin {
-						break
+					uncompletedCards = removeCardFromUncompleted(uncompletedCards, cardIdx)
+
+					if !lastBoardToWin || (len(uncompletedCards) == 0 && foundCompleted) {
+						return cards[cardIdx].calculateScore(completedOnNumber)
 					}
 				}
 			}
@@ -162,8 +164,7 @@ func CalculateFinalScore(numbers []int, cards []BingoCard, lastBoardToWin bool) 
 			hasLastBoard = true
 			completedCardIdx = uncompletedCards[0]
 		}
-
-		if (foundCompleted && !lastBoardToWin) || (foundCompleted && len(uncompletedCards) == 0) {
+		if (foundCompleted && !lastBoardToWin) || (len(uncompletedCards) == 0 && foundCompleted) {
 			break
 		}
 	}
