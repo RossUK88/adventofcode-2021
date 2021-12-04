@@ -4,6 +4,7 @@ import (
 	"adventofcode/day1"
 	"adventofcode/day2"
 	"adventofcode/day3"
+	"adventofcode/day4"
 	"fmt"
 )
 
@@ -19,4 +20,9 @@ func main() {
 	// Day 3
 	fmt.Printf("The power consumption of the submarine in Day 3 is : %d\n", day3.GetSubmarinePowerConsumption("./day3/input.txt"))
 	fmt.Printf("The life suport rating of the submarine in Day 3 is : %d\n", day3.GetSubmarineLifeSupportRating("./day3/input.txt"))
+
+	// Day 4
+	fmt.Printf("The final score for Day 4 is : %d\n", day4.GetFinalBingoScoreFromFile("./day4/input.txt"))
+	//fmt.Printf("The life suport rating of the submarine in Day 3 is : %d\n", day3.GetSubmarineLifeSupportRating("./day3/input.txt"))
+
 }

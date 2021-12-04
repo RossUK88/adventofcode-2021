@@ -2,7 +2,6 @@ package day4
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -19,7 +18,6 @@ type Position struct {
 }
 
 func (bc *BingoCard) buildBoard() {
-	fmt.Println("Building Board")
 	row := 0
 	cursor := 0
 	for cursor+5 <= len(bc.numbers) {
@@ -116,8 +114,6 @@ func GetFinalBingoScoreFromFile(file string) int {
 		log.Fatalf("Unable to read inputs from file, %s", err)
 	}
 
-	fmt.Println(cards[0].board)
-
 	return CalculateFinalScore(bingoNumbers, cards)
 }
 
@@ -145,14 +141,7 @@ func CalculateFinalScore(numbers []int, cards []BingoCard) int {
 		}
 	}
 
-	fmt.Println(cards)
-
-	if foundCompleted {
-		fmt.Println(completedCardIdx)
-		fmt.Println("")
-		fmt.Println(cards[completedCardIdx])
-		fmt.Println(cards[completedCardIdx].calculateScore(completedOnNumber))
-	} else {
+	if !foundCompleted {
 		log.Fatal("We have marked all numbers and not found a completed card")
 	}
 
@@ -208,7 +197,6 @@ func readBingoCardsFromFile(fileLocation string) ([]int, []BingoCard, error) {
 			number = strings.TrimSpace(number)
 			conv, err := strconv.Atoi(number)
 			if err != nil {
-				fmt.Println(err)
 				log.Fatal("Unable to convert bingo number form string to int")
 			}
 			allNumbers = append(allNumbers, conv)
@@ -225,7 +213,6 @@ func readBingoCardsFromFile(fileLocation string) ([]int, []BingoCard, error) {
 	cursor := 0
 	i := 0
 	for cursor+25 <= len(allNumbers) {
-		fmt.Printf("Creating board %d \n", i+1)
 		card := BingoCard{
 			numbers: allNumbers[cursor : cursor+25],
 			board:   [5][]Position{},
