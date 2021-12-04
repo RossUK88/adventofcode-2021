@@ -18,12 +18,12 @@ type Position struct {
 	marked bool
 }
 
-func (b *BingoCard) buildBoard() {
+func (bc *BingoCard) buildBoard() {
 	fmt.Println("Building Board")
 	row := 0
 	cursor := 0
-	for cursor+5 <= len(b.numbers) {
-		numbers := b.numbers[cursor : cursor+5]
+	for cursor+5 <= len(bc.numbers) {
+		numbers := bc.numbers[cursor : cursor+5]
 
 		var positions []Position
 
@@ -34,11 +34,66 @@ func (b *BingoCard) buildBoard() {
 			})
 		}
 
-		b.board[row] = positions
+		bc.board[row] = positions
 
 		row++
 		cursor += 5
 	}
+}
+
+func (bc *BingoCard) mark(number int) bool {
+	found := false
+	for rowIdx, row := range bc.board {
+		for colIdx, position := range row {
+			if position.value == number {
+				bc.board[rowIdx][colIdx].marked = true
+				found = true
+			}
+		}
+	}
+
+	return found
+}
+
+func (bc *BingoCard) checkCompleted() bool {
+	completed := false
+
+	// Check Rows for completion
+	for _, row := range bc.board {
+		rowComplete := true
+		for _, position := range row {
+			if !position.marked {
+				rowComplete = false
+			}
+		}
+
+		if rowComplete {
+			completed = true
+			break
+		}
+	}
+
+	// We have a complete Row
+	if completed {
+		return true
+	}
+
+	// TODO - Check Columns for Completion
+
+	return completed
+}
+
+func (bc *BingoCard) calculateScore(completedOnNumber int) int {
+	unmarkedSum := 0
+	for _, row := range bc.board {
+		for _, position := range row {
+			if !position.marked {
+				unmarkedSum += position.value
+			}
+		}
+	}
+
+	return unmarkedSum * completedOnNumber
 }
 
 func GetFinalBingoScoreFromFile(file string) int {
@@ -53,8 +108,41 @@ func GetFinalBingoScoreFromFile(file string) int {
 }
 
 func CalculateFinalScore(numbers []int, cards []BingoCard) int {
+	foundCompleted := false
+	completedCardIdx := 0
+	completedOnNumber := 0
 
-	return 1
+	for _, numberToMark := range numbers {
+		for cardIdx, card := range cards {
+			markedNumberOnCard := card.mark(numberToMark)
+
+			if markedNumberOnCard {
+				if card.checkCompleted() {
+					foundCompleted = true
+					completedOnNumber = numberToMark
+					completedCardIdx = cardIdx
+					break
+				}
+			}
+		}
+
+		if foundCompleted {
+			break
+		}
+	}
+
+	fmt.Println(cards)
+
+	if foundCompleted {
+		fmt.Println(completedCardIdx)
+		fmt.Println("")
+		fmt.Println(cards[completedCardIdx])
+		fmt.Println(cards[completedCardIdx].calculateScore(completedOnNumber))
+	} else {
+		log.Fatal("We have marked all numbers and not found a completed card")
+	}
+
+	return cards[completedCardIdx].calculateScore(completedOnNumber)
 }
 
 func readBingoCardsFromFile(fileLocation string) ([]int, []BingoCard, error) {
