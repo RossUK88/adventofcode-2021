@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func GetOverlapsFromFile(file string) int {
@@ -17,10 +19,69 @@ func GetOverlapsFromFile(file string) int {
 }
 
 func CalculateOverLaps(vents []string) int {
+	mappedVents := make(map[string]string)
+	intersections := 0
 
-	fmt.Println(vents)
+	for _, vent := range vents {
+		positions := strings.Split(vent, " -> ")
+		from := positions[0]
+		to := positions[1]
 
-	return 1
+		linesFrom := strings.Split(from, ",")
+		fromX := linesFrom[0]
+		fromY := linesFrom[1]
+
+		linesTo := strings.Split(to, ",")
+		toX := linesTo[0]
+		toY := linesTo[1]
+
+		// We are going down
+
+		if fromX == toX {
+			fromYConv, _ := strconv.Atoi(fromY)
+			toYConv, _ := strconv.Atoi(toY)
+
+			f := fromYConv
+			t := toYConv
+			if f > t {
+				f = t
+				t = fromYConv
+			}
+
+			for i := f; i <= t; i++ {
+				keyFromPosition := getMapKeyFromPosition(fromX, fmt.Sprintf("%d", i))
+
+				if _, ok := mappedVents[keyFromPosition]; ok {
+					intersections++
+				} else {
+					mappedVents[keyFromPosition] = "a"
+				}
+			}
+
+		} else if fromY == toY {
+			fromXConv, _ := strconv.Atoi(fromX)
+			toXConv, _ := strconv.Atoi(toX)
+
+			f := fromXConv
+			t := toXConv
+			if f > t {
+				f = t
+				t = fromXConv
+			}
+
+			for i := f; i <= t; i++ {
+				keyFromPosition := getMapKeyFromPosition(fmt.Sprintf("%d", i), fromY)
+
+				if _, ok := mappedVents[keyFromPosition]; ok {
+					intersections++
+				} else {
+					mappedVents[keyFromPosition] = "a"
+				}
+			}
+		}
+	}
+
+	return intersections
 }
 
 func readVentsFromFile(fileLocation string) ([]string, error) {
@@ -48,4 +109,11 @@ func readVentsFromFile(fileLocation string) ([]string, error) {
 	}
 
 	return allInputs, nil
+}
+
+func getMapKeyFromPosition(x string, y string) string {
+	var positions []string
+	positions = append(positions, x)
+	positions = append(positions, y)
+	return strings.Join(positions, "")
 }

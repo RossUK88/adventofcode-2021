@@ -5,6 +5,7 @@ import (
 	"adventofcode/day2"
 	"adventofcode/day3"
 	"adventofcode/day4"
+	"adventofcode/day5"
 	"fmt"
 )
 
@@ -24,5 +25,9 @@ func main() {
 	// Day 4
 	fmt.Printf("The final score for Day 4 is : %d\n", day4.GetFinalBingoScoreFromFile("./day4/input.txt"))
 	fmt.Printf("The final score of the last winning board in Day 4 is : %d\n", day4.GetFinalBingoScoreFromLastToWinFromFile("./day4/input.txt"))
+
+	// Day 4
+	fmt.Printf("The intersections for Day 5 is : %d\n", day5.GetOverlapsFromFile("./day5/input.txt"))
+	//fmt.Printf("The final score of the last winning board in Day 4 is : %d\n", day4.GetFinalBingoScoreFromLastToWinFromFile("./day4/input.txt"))
 
 }
