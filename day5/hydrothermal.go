@@ -19,7 +19,7 @@ func GetOverlapsFromFile(file string) int {
 }
 
 func CalculateOverLaps(vents []string) int {
-	mappedVents := make(map[string]string)
+	mappedVents := make(map[string]int)
 	intersections := 0
 
 	for _, vent := range vents {
@@ -51,17 +51,17 @@ func CalculateOverLaps(vents []string) int {
 			for i := f; i <= t; i++ {
 				keyFromPosition := getMapKeyFromPosition(fromX, fmt.Sprintf("%d", i))
 				if _, ok := mappedVents[keyFromPosition]; ok {
-					strToInt, _ := strconv.Atoi(mappedVents[keyFromPosition])
+					count := mappedVents[keyFromPosition]
 
-					if strToInt == 1 {
+					if count == 1 {
 						intersections++
 					}
 
-					ammIntersections := strToInt + 1
+					ammIntersections := count + 1
 
-					mappedVents[keyFromPosition] = fmt.Sprintf("%d", ammIntersections)
+					mappedVents[keyFromPosition] = ammIntersections
 				} else {
-					mappedVents[keyFromPosition] = fmt.Sprintf("%d", 1)
+					mappedVents[keyFromPosition] = 1
 				}
 			}
 
@@ -80,18 +80,18 @@ func CalculateOverLaps(vents []string) int {
 				keyFromPosition := getMapKeyFromPosition(fmt.Sprintf("%d", i), fromY)
 
 				if _, ok := mappedVents[keyFromPosition]; ok {
-					strToInt, _ := strconv.Atoi(mappedVents[keyFromPosition])
+					count := mappedVents[keyFromPosition]
 
-					if strToInt == 1 {
+					if count == 1 {
 						intersections++
 					}
 
-					ammIntersections := strToInt + 1
+					ammIntersections := count + 1
 
-					mappedVents[keyFromPosition] = fmt.Sprintf("%d", ammIntersections)
+					mappedVents[keyFromPosition] = ammIntersections
 
 				} else {
-					mappedVents[keyFromPosition] = fmt.Sprintf("%d", 1)
+					mappedVents[keyFromPosition] = 1
 				}
 			}
 		} else {

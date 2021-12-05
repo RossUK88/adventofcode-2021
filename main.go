@@ -7,6 +7,8 @@ import (
 	"adventofcode/day4"
 	"adventofcode/day5"
 	"fmt"
+	"log"
+	"time"
 )
 
 func main() {
@@ -27,8 +29,12 @@ func main() {
 	fmt.Printf("The final score of the last winning board in Day 4 is : %d\n", day4.GetFinalBingoScoreFromLastToWinFromFile("./day4/input.txt"))
 
 	// Day 4
+	start := time.Now()
+
 	fmt.Printf("The intersections for Day 5 is : %d\n", day5.GetOverlapsFromFile("./day5/input.txt"))
 	//fmt.Printf("The intersections for Day 5 is : %d\n", day5.GetOverlapsFromFile("./day5/sample_input.txt"))
 	//fmt.Printf("The final score of the last winning board in Day 4 is : %d\n", day4.GetFinalBingoScoreFromLastToWinFromFile("./day4/input.txt"))
 
+	elapsed := time.Since(start)
+	log.Printf("Binomial took %s", elapsed)
 }
