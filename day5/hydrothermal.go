@@ -52,9 +52,15 @@ func CalculateOverLaps(vents []string) int {
 				keyFromPosition := getMapKeyFromPosition(fromX, fmt.Sprintf("%d", i))
 
 				if _, ok := mappedVents[keyFromPosition]; ok {
-					intersections++
+					strToInt, _ := strconv.Atoi(mappedVents[keyFromPosition])
+					if strToInt == 1 {
+						intersections++
+					}
+					ammIntersections := strToInt + 1
+
+					mappedVents[keyFromPosition] = fmt.Sprintf("%d", ammIntersections)
 				} else {
-					mappedVents[keyFromPosition] = "a"
+					mappedVents[keyFromPosition] = fmt.Sprintf("%d", 1)
 				}
 			}
 
@@ -73,11 +79,20 @@ func CalculateOverLaps(vents []string) int {
 				keyFromPosition := getMapKeyFromPosition(fmt.Sprintf("%d", i), fromY)
 
 				if _, ok := mappedVents[keyFromPosition]; ok {
-					intersections++
+					strToInt, _ := strconv.Atoi(mappedVents[keyFromPosition])
+					if strToInt == 1 {
+						intersections++
+					}
+					ammIntersections := strToInt + 1
+
+					mappedVents[keyFromPosition] = fmt.Sprintf("%d", ammIntersections)
+
 				} else {
-					mappedVents[keyFromPosition] = "a"
+					mappedVents[keyFromPosition] = fmt.Sprintf("%d", 1)
 				}
 			}
+		} else {
+			fmt.Println("Diag")
 		}
 	}
 
