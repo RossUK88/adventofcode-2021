@@ -20,9 +20,10 @@ func GetTotalLanternfishFromFile(file string, days int) int {
 
 func CalculateLanternFish(fish map[int]int, days int) int {
 	// TODO we need to keep the next count rather than the old
-	// next[8] += counts[0]
-	// next[6] += counts[0]
-	//	 next[i] += counts[i+1]
+	// next[8] += fish[0]
+	// next[6] += fish[0]
+	//	 next[j] += fish[j+1]
+	// fish = next
 
 	oldFish := fish
 	for i := 1; i <= days; i++ {
