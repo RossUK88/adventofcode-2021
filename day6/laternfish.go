@@ -31,6 +31,7 @@ func CalculateLanternFish(fish map[int]int, days int) int {
 
 				// TODO WHY YOU NO PUT FISHY IN 6?!?!
 				if _, ok := fish[6]; ok {
+					fmt.Println(fish[6])
 					fish[6] += newFish
 				} else {
 					fish[6] = newFish
@@ -50,6 +51,7 @@ func CalculateLanternFish(fish map[int]int, days int) int {
 		totalFish += fish[j]
 	}
 
+	fmt.Println(fish)
 	return totalFish
 }
 
