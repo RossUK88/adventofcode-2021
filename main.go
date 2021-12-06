@@ -6,6 +6,7 @@ import (
 	"adventofcode/day3"
 	"adventofcode/day4"
 	"adventofcode/day5"
+	"adventofcode/day6"
 	"fmt"
 	"log"
 	"time"
@@ -37,4 +38,15 @@ func main() {
 
 	elapsed := time.Since(start)
 	log.Printf("Binomial took %s", elapsed)
+
+	start = time.Now()
+	fmt.Printf("The total lantern fish after day 80 for Day 6 is : %d\n", day6.GetTotalLanternfishFromFile("./day6/input.txt", 80))
+	elapsed = time.Since(start)
+	log.Printf("took %s", elapsed)
+
+	start = time.Now()
+	fmt.Printf("The total lantern fish after day 256 for Day 6 is : %d\n", day6.GetTotalLanternfishFromFile("./day6/input.txt", 256))
+	elapsed = time.Since(start)
+	log.Printf("took %s", elapsed)
+
 }
